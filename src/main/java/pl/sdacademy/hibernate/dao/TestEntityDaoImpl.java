@@ -9,13 +9,16 @@ import pl.sdacademy.utils.HibernateUtils;
 import java.util.List;
 
 public class TestEntityDaoImpl implements TestEntityDao {
+
+    SessionFactory factory = HibernateUtils.getInstance().getFactory();
+    Session session = factory.getCurrentSession();
+
     public void saveOrUpdate(TestEntity testEntity) {
-        SessionFactory factory = HibernateUtils.getInstance().getFactory();
-        Session session = factory.getCurrentSession();
 
         session.beginTransaction();
         session.saveOrUpdate(testEntity);
-        session.getTransaction().commit();;
+        session.getTransaction().commit();
+
         session.close();
     }
 
@@ -38,4 +41,15 @@ public class TestEntityDaoImpl implements TestEntityDao {
     public List<TestEntity> findByValue(Integer minRange, Long maxRange) {
         return null;
     }
+
+    /*public List<TestEntity> findByValue(Integer minRange, Long maxRange) {
+        Session session = factory.getCurrentSession();
+        List<TestEntity> result = session
+                .createQuery("from TestEntity where value > :min and value < :max ")
+                .setParameter("min", minRange)
+                .setParameter("max", maxRange)
+                .list();
+
+        return result;
+    }*/
 }
